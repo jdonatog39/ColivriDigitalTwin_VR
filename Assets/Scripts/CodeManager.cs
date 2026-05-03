@@ -30,24 +30,10 @@ public class CodeManager : MonoBehaviour
     [Tooltip("Tiempo que se muestra el feedback 'correcto' ANTES de mostrar estadísticas y volver a registro.")]
     [SerializeField] private float perRetoFeedbackDelay = 1.2f;
 
-    [Header("Easy Mode - Feedback por dígito")]
-    [SerializeField] private GameObject[] chulitos;    // chulito1, chulito2, chulito3
-    [SerializeField] private GameObject[] equises;     // x1, x2, x3
-    [SerializeField] private GameObject[] botonesArriba;  // ButtonUp1, ButtonUp2, ButtonUp3
-    [SerializeField] private GameObject[] botonesAbajo;   // ButtonDown1, ButtonDown2, ButtonDown3
-
-    private bool[] digitoBloqueado = new bool[3];
-
     public static event Action<float> OnCodeSuccessEvent;
 
     private float sessionStartTime;  // inicio de la partida (un reto)
     private float retoStartTime;     // alias por si quieres métricas por reto
-
-    private bool EsModoFacil()
-    {
-        return GameController.Instance != null &&
-               GameController.Instance.GetCurrentDifficulty() == Difficulty.Easy;
-    }
 
     private void Start()
     {
@@ -57,7 +43,6 @@ public class CodeManager : MonoBehaviour
     /// <summary>
     /// Llamado desde GameController al presionar Play para arrancar la partida (un reto).
     /// </summary>
-
     public void BeginSession(bool shuffle = false)
     {
         if (retoLoader == null)
@@ -95,33 +80,11 @@ public class CodeManager : MonoBehaviour
         if (panelCorrecto1) panelCorrecto1.SetActive(false);
         if (panelCerca)    panelCerca.SetActive(false);
         if (panelClave)    panelClave.SetActive(true);
-
-        digitoBloqueado = new bool[3];
-        LimpiarFeedbackDigitos();
-    }
-
-    private void LimpiarFeedbackDigitos()
-    {
-        for (int i = 0; i < 3; i++)
-        {
-            if (chulitos != null && i < chulitos.Length && chulitos[i])
-                chulitos[i].SetActive(false);
-            if (equises != null && i < equises.Length && equises[i])
-                equises[i].SetActive(false);
-            if (botonesArriba != null && i < botonesArriba.Length && botonesArriba[i])
-                botonesArriba[i].SetActive(true);
-            if (botonesAbajo != null && i < botonesAbajo.Length && botonesAbajo[i])
-                botonesAbajo[i].SetActive(true);
-        }
     }
 
     private void ResetDigits()
     {
-        for (int i = 0; i < digitValues.Length; i++)
-        {
-            if (EsModoFacil() && digitoBloqueado[i]) continue; // no resetear bloqueados
-            digitValues[i] = 0;
-        }
+        for (int i = 0; i < digitValues.Length; i++) digitValues[i] = 0;
         UpdateDisplay();
     }
 
@@ -136,8 +99,6 @@ public class CodeManager : MonoBehaviour
 
     public void IncreaseDigit(int index)
     {
-        if (EsModoFacil() && digitoBloqueado[index]) return;
-
         if (panelCorrecto) panelCorrecto.SetActive(false);
         if(panelCorrecto1) panelCorrecto1.SetActive(false);
         if (panelCerca)    panelCerca.SetActive(false);
@@ -149,8 +110,6 @@ public class CodeManager : MonoBehaviour
 
     public void DecreaseDigit(int index)
     {
-        if (EsModoFacil() && digitoBloqueado[index]) return;
-
         if (panelCorrecto) panelCorrecto.SetActive(false);
         if(panelCorrecto1) panelCorrecto1.SetActive(false);
         if (panelCerca)    panelCerca.SetActive(false);
@@ -198,16 +157,6 @@ public class CodeManager : MonoBehaviour
             panelCorrecto.SetActive(true);
             panelCorrecto1.SetActive(true);
             panelClave.SetActive(false);
-
-            if (EsModoFacil())
-            {
-                for (int i = 0; i < 3; i++)
-                {
-                    if (chulitos[i]) chulitos[i].SetActive(true);
-                    if (equises[i])  equises[i].SetActive(false);
-                }
-            }
-
             float totalElapsed;
             if (timerDef != null)
             {
@@ -256,29 +205,7 @@ public class CodeManager : MonoBehaviour
             }
             if (txtPosiciones != null) txtPosiciones.SetText("{0}", good);
             if (txtWrongPos != null)   txtWrongPos.SetText("{0}", wrong);
-            if (EsModoFacil())
-            {
-                for (int i = 0; i < 3; i++)
-                {
-                    if (digitoBloqueado[i]) continue; // ya bloqueado, no tocar
 
-                    bool esCorrecto = currentInput[i] == respuestaActual[i];
-
-                    if (esCorrecto)
-                    {
-                        digitoBloqueado[i] = true;
-                        if (chulitos[i])      chulitos[i].SetActive(true);
-                        if (equises[i])       equises[i].SetActive(false);
-                        if (botonesArriba[i]) botonesArriba[i].SetActive(false);
-                        if (botonesAbajo[i])  botonesAbajo[i].SetActive(false);
-                    }
-                    else
-                    {
-                        if (equises[i])  equises[i].SetActive(true);
-                        if (chulitos[i]) chulitos[i].SetActive(false);
-                    }
-                }
-            }
             panelCerca.SetActive(true);
             panelClave.SetActive(false);
         }
