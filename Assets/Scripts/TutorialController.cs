@@ -20,7 +20,7 @@ public class TutorialController : MonoBehaviour
         public Stage stage;
         [Tooltip("Panel principal de instrucciones de la etapa")]
         public GameObject panel;
-        [Tooltip("Animator principal de la etapa (e.g., para la guía del panel)")]
+        [Tooltip("Animator principal de la etapa (e.g., para la guï¿½a del panel)")]
         public Animator animator;
 
 
@@ -78,14 +78,14 @@ public class TutorialController : MonoBehaviour
     [Header("UI Principal")]
     [SerializeField] private TMP_Text instructionText;
 
-    [Header("Animación de Aura (Robot)")]
+    [Header("Animaciï¿½n de Aura (Robot)")]
     [SerializeField] private Animator auraAnimator;
     [SerializeField] private string talkingBoolName = "talking"; 
     [SerializeField] private string clappingTriggerName = "clapping";
     [SerializeField] private string greetingName = "greeting";
 
     [Header("Progreso de Etapas (Animators)")]
-    [Tooltip("Lista de Animators que representan los íconos de progreso (Observación, Controladores, Teleport, Agarre) en orden.")]
+    [Tooltip("Lista de Animators que representan los ï¿½conos de progreso (Observaciï¿½n, Controladores, Teleport, Agarre) en orden.")]
     [SerializeField] private Animator[] progressAnimators;
     [Tooltip("Trigger a activar en el Animator de progreso cuando una etapa se completa (e.g., 'Activate' o 'Check').")]
     [SerializeField] private string progressTrigger = "Activate";
@@ -125,14 +125,14 @@ public class TutorialController : MonoBehaviour
 
     [Header("Teleport Settings")]
     [SerializeField] private GameObject locomotionRoot;
-    [Tooltip("El objeto Target (e.g., cilindro, círculo) que se activa y completa el paso al ser tocado por el jugador (usando un Box Collider con Is Trigger).")]
+    [Tooltip("El objeto Target (e.g., cilindro, cï¿½rculo) que se activa y completa el paso al ser tocado por el jugador (usando un Box Collider con Is Trigger).")]
     [SerializeField] private GameObject teleportTargetTrigger;
     private bool teleportTargetReached = false; 
-    private bool teleportEnabled = false;
+    private bool teleportEnabled = false;
     private readonly List<Behaviour> cachedTeleportBehaviours = new List<Behaviour>();
     private bool teleportCacheBuilt = false;
 
-    [Header("Observación 360°")]
+    [Header("Observaciï¿½n 360ï¿½")]
     [SerializeField] private float requiredYaw = 300f;
     [SerializeField] private float minAngularSpeed = 5f;
     private float obsAccumYaw;
@@ -142,7 +142,7 @@ public class TutorialController : MonoBehaviour
     [SerializeField] private List<GameObject> grabbables = new List<GameObject>();
     private bool anyGrabRegistered;
 
-    [Header("Controladores detección")]
+    [Header("Controladores detecciï¿½n")]
     [SerializeField] private bool useTriggersForFace = true;
     [SerializeField] private float moveDelta = 0.15f;
     [SerializeField] private float faceRadius = 0.28f;
@@ -195,7 +195,7 @@ public class TutorialController : MonoBehaviour
         SetTeleportActive(false);
 
 
-        completedStages.Clear();
+        completedStages.Clear();
 
        
     }
@@ -226,9 +226,9 @@ public class TutorialController : MonoBehaviour
 
                 case Stage.Teleport:
                     UpdateTeleportLogic();
-                    break; 
+                    break; 
 
-                case Stage.Agarre:
+                case Stage.Agarre:
                     if (CheckGrabbedOnce()) CompleteCurrentStage();
                     break;
             }
@@ -248,7 +248,7 @@ public class TutorialController : MonoBehaviour
     {
         current = st;
 
-        if (teleportTargetTrigger) teleportTargetTrigger.SetActive(false);
+        if (teleportTargetTrigger) teleportTargetTrigger.SetActive(false);
 
 
         switch (st)
@@ -258,7 +258,7 @@ public class TutorialController : MonoBehaviour
                 {
                     auraAnimator.SetTrigger(greetingName);
                 }
-                Say("¡Bienvenido al laboratorio! Aquí aprenderás a interactuar en Realidad Virtual.");
+                Say("ï¿½Bienvenido al laboratorio! Aquï¿½ aprenderï¿½s a interactuar en Realidad Virtual.");
                 PlayVoice(saludoClip);
                 var sa_saludo = GetSA(st);
                 instructionsPanel.SetActive(false);
@@ -294,16 +294,16 @@ public class TutorialController : MonoBehaviour
                 hasPlayedTargetAudio = false;
                 teleportTargetReached = false;
 
-                if (teleportTargetTrigger) teleportTargetTrigger.SetActive(true); 
+                if (teleportTargetTrigger) teleportTargetTrigger.SetActive(true); 
 
-                StartCoroutine(PlayTeleportSequence());
+                StartCoroutine(PlayTeleportSequence());
                 PlayStageEnter(st);
                 SetTeleportActive(true);
                 break;
 
             case Stage.Agarre:
                 InitGrab();
-                Say("Apunta al objeto y aprieta el gatillo para sujetarlo. Mantén presionado para sostenerlo y suelta para dejarlo.");
+                Say("Apunta al objeto y aprieta el gatillo para sujetarlo. Mantï¿½n presionado para sostenerlo y suelta para dejarlo.");
                 instructionsPanel.SetActive(true);
                 PlayVoice(agarreClip);
                 PlayStageEnter(st);
@@ -311,7 +311,7 @@ public class TutorialController : MonoBehaviour
                 break;
 
             case Stage.Cierre:
-                Say("¡Excelente! Dirígete a la puerta holográfica para continuar.");
+                Say("ï¿½Excelente! Dirï¿½gete a la puerta hologrï¿½fica para continuar.");
                 PlayVoice(cierreClip);
 
 
@@ -326,7 +326,7 @@ public class TutorialController : MonoBehaviour
 
     private IEnumerator PlayTeleportSequence()
     {
-        Say("Vamos a enseñarte cómo moverte usando Teleport.");
+        Say("Vamos a enseï¿½arte cï¿½mo moverte usando Teleport.");
         if (teleportIntroClip)
         {
             PlayVoice(teleportIntroClip);
@@ -347,9 +347,9 @@ public class TutorialController : MonoBehaviour
 
         Vector2 rs = Vector2.zero;
 #if UNITY_ANDROID || UNITY_STANDALONE
-        rs = OVRInput.Get(OVRInput.Axis2D.SecondaryThumbstick);
+rs = OVRInput.Get(OVRInput.Axis2D.SecondaryThumbstick);
 #endif
-        if (rs.y > thumbstickForwardThreshold)
+        if (rs.y > thumbstickForwardThreshold)
         {
             thumbHoldTimer += Time.deltaTime;
 
@@ -386,7 +386,7 @@ public class TutorialController : MonoBehaviour
 
 
 
-    private void BuildTeleportCacheIfNeeded()
+    private void BuildTeleportCacheIfNeeded()
     {
         if (teleportCacheBuilt) return;
         teleportCacheBuilt = true;
@@ -477,7 +477,7 @@ public class TutorialController : MonoBehaviour
 
     private void CompleteCurrentStage()
     {
-        if (current == Stage.Teleport && teleportTargetTrigger)
+        if (current == Stage.Teleport && teleportTargetTrigger)
         {
             teleportTargetTrigger.SetActive(false);
         }
@@ -539,7 +539,7 @@ public class TutorialController : MonoBehaviour
             }
             else
             {
-                Debug.Log("Celebration: celebrationSource ya está sonando; no lanzo otra reproducción.");
+                Debug.Log("Celebration: celebrationSource ya estï¿½ sonando; no lanzo otra reproducciï¿½n.");
             }
 
             waitTime = Mathf.Min(clipToPlay.length, celebrationDuration);
@@ -609,7 +609,7 @@ public class TutorialController : MonoBehaviour
     {
         
         yield return new WaitForSeconds(clipLength);
-        print("acabó el audio");
+        print("acabï¿½ el audio");
         if (auraAnimator)
         {
             auraAnimator.SetBool(talkingBoolName, false);
@@ -618,7 +618,7 @@ public class TutorialController : MonoBehaviour
 
     public void NotifyTeleportTargetReached()
     {
-        if (current == Stage.Teleport && !teleportTargetReached)
+        if (current == Stage.Teleport && !teleportTargetReached)
         {
             teleportTargetReached = true;
             CompleteCurrentStage();
